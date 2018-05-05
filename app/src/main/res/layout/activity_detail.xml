@@ -47,7 +47,7 @@
                 android:id="@+id/detail_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:src="@drawable/holder_2"
+                tools:src="@drawable/holder"
                 android:contentDescription="@string/detail_image" />
 
             <ImageView

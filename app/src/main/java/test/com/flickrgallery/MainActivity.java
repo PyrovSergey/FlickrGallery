@@ -1,5 +1,7 @@
 package test.com.flickrgallery;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -107,28 +109,33 @@ public final class MainActivity extends AppCompatActivity implements SwipeRefres
         if (idlingResource != null) {
             idlingResource.setIdleState(false);
         }
-        App.getApi()
-                .getData(FLICKR_PHOTOS_GET_RECENT,
-                        KEY,
-                        FORMAT_RESPONSE,
-                        1, IMAGE_TYPE)
-                .enqueue(new Callback<Response>() {
-                    @Override
-                    public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                        updateData(response);
-                    }
+        if (isInternetAvailable(this)) {
+            App.getApi()
+                    .getData(FLICKR_PHOTOS_GET_RECENT,
+                            KEY,
+                            FORMAT_RESPONSE,
+                            1, IMAGE_TYPE)
+                    .enqueue(new Callback<Response>() {
+                        @Override
+                        public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                            updateData(response);
+                        }
 
-                    @Override
-                    public void onFailure(Call<Response> call, Throwable t) {
-                        showError();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<Response> call, Throwable t) {
+                            //showError();
+                        }
+                    });
+        } else {
+            showNoInternetConnection(this);
+        }
     }
 
     private void searchPhotos(String query) {
         if (idlingResource != null) {
             idlingResource.setIdleState(false);
         }
+        if (isInternetAvailable(this)) {
         App.getApi()
                 .searchData(FLICKR_PHOTOS_SEARCH,
                         KEY,
@@ -142,9 +149,12 @@ public final class MainActivity extends AppCompatActivity implements SwipeRefres
 
                     @Override
                     public void onFailure(Call<Response> call, Throwable t) {
-                        showError();
+                        //showError();
                     }
                 });
+        } else {
+            showNoInternetConnection(this);
+        }
     }
 
     private void updateData(retrofit2.Response<Response> response) {
@@ -154,9 +164,17 @@ public final class MainActivity extends AppCompatActivity implements SwipeRefres
         swipeRefresh.setRefreshing(false);
     }
 
-    private void showError() {
-        Toast.makeText(getApplicationContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+    private void showNoInternetConnection(Context context) {
+        Toast.makeText(context, R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
         swipeRefresh.setRefreshing(false);
+    }
+
+    private static boolean isInternetAvailable(@NonNull final Context context) {
+        final ConnectivityManager mConMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return mConMgr != null
+                && mConMgr.getActiveNetworkInfo() != null
+                && mConMgr.getActiveNetworkInfo().isAvailable()
+                && mConMgr.getActiveNetworkInfo().isConnected();
     }
 
     @Override

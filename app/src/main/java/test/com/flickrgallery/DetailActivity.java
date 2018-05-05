@@ -3,8 +3,10 @@ package test.com.flickrgallery;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -60,13 +63,19 @@ public final class DetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
         cardView.setBackgroundColor(getBackgroundColor());
         layoutBackground.setBackgroundColor(getBackgroundColor());
         imageBack.setColorFilter(getBackButtonsColor());
         imageShare.setColorFilter(getBackgroundColor());
         imageOpenInBrowser.setColorFilter(getBackgroundColor());
 
-        Glide.with(this).load(getPhotoUri()).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.DATA)).listener(new RequestListener<Drawable>() {
+        if (!isInternetAvailable(this)) {
+            showNoInternetConnection(this);
+        }
+
+        Glide.with(this).load(getPhotoUri()).apply(RequestOptions.errorOf(R.drawable.holder)).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 return false;
@@ -145,6 +154,18 @@ public final class DetailActivity extends AppCompatActivity {
 
     private int getBackButtonsColor() {
         return getIntent().getIntExtra(KEY_COLOR_BUTTONS, 0);
+    }
+
+    private static boolean isInternetAvailable(@NonNull final Context context) {
+        final ConnectivityManager mConMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return mConMgr != null
+                && mConMgr.getActiveNetworkInfo() != null
+                && mConMgr.getActiveNetworkInfo().isAvailable()
+                && mConMgr.getActiveNetworkInfo().isConnected();
+    }
+
+    private void showNoInternetConnection(Context context) {
+        Toast.makeText(context, R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
     }
 
     @Override

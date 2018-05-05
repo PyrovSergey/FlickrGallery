@@ -21,8 +21,10 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withResourceName;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class UserSearchChoiceBackAndSwipeClearSearchActivityTest {
@@ -43,6 +45,7 @@ public class UserSearchChoiceBackAndSwipeClearSearchActivityTest {
         onView(withId(R.id.search_button)).perform(click());
         onView(withResourceName("search_src_text"))
                 .perform(typeText("cat"), pressKey(KeyEvent.KEYCODE_ENTER));
+        onView(withId(R.id.search_src_text)).check(matches(withText("cat")));
         Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(15, ViewActions.click()));
         onView(withId(R.id.image_back)).perform(click());
         Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, ViewActions.click()));
@@ -50,6 +53,7 @@ public class UserSearchChoiceBackAndSwipeClearSearchActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(7, ViewActions.click()));
         onView(withId(R.id.image_back)).perform(click());
         onView(withId(R.id.photo_recycler_view)).perform(swipeDown());
+        onView(withId(R.id.search_src_text)).check(matches(withText("")));
         Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(15, ViewActions.click()));
         onView(withId(R.id.image_back)).perform(click());
         Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, ViewActions.click()));
@@ -58,6 +62,7 @@ public class UserSearchChoiceBackAndSwipeClearSearchActivityTest {
         onView(withId(R.id.image_back)).perform(click());
         onView(withResourceName("search_src_text"))
                 .perform(typeText("dog"), pressKey(KeyEvent.KEYCODE_ENTER));
+        onView(withId(R.id.search_src_text)).check(matches(withText("dog")));
         Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(15, ViewActions.click()));
         onView(withId(R.id.image_back)).perform(click());
         Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, ViewActions.click()));
@@ -65,6 +70,7 @@ public class UserSearchChoiceBackAndSwipeClearSearchActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(7, ViewActions.click()));
         onView(withId(R.id.image_back)).perform(click());
         onView(withId(R.id.search_close_btn)).perform(click());
+        onView(withId(R.id.search_src_text)).check(matches(withText("")));
         onView(withId(R.id.search_close_btn)).perform(click());
         Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(15, ViewActions.click()));
         onView(withId(R.id.image_back)).perform(click());

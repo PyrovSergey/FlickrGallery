@@ -62,7 +62,9 @@ public final class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoH
         holder.bindPhotoItem(photoItem);
         holder.progressBarItem.setVisibility(View.VISIBLE);
 
-        Glide.with(context).load(photoItem.getPhotoPageUri()).thumbnail(0.50f).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.DATA))
+        Glide.with(context).load(photoItem.getPhotoPageUri()).thumbnail(0.50f)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.DATA))
+                .apply(RequestOptions.errorOf(R.drawable.holder))
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
