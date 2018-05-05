@@ -1,10 +1,10 @@
 package test.com.flickrgallery.Model;
 
-public class Response{
+public class Response {
 
-	private Photos photos;
+    private Photos photos;
 
-	public Photos getPhotos(){
-		return photos;
-	}
+    public Photos getPhotos() {
+        return photos;
+    }
 }

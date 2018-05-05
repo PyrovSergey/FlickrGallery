@@ -53,7 +53,6 @@ public final class DetailActivity extends AppCompatActivity {
     @BindView(R.id.title_view)
     TextView titleView;
 
-    // нет кнопки расшарить так как не загрузилась сама картинка
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

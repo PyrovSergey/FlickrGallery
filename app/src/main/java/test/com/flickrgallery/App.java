@@ -4,7 +4,6 @@ import android.app.Application;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import test.com.flickrgallery.FlickrApi;
 
 public final class App extends Application {
     public static final String BASE_URL = "https://api.flickr.com";
