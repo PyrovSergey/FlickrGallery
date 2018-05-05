@@ -30,9 +30,9 @@ import test.com.flickrgallery.Model.PhotoItem;
 
 public final class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder> {
 
-    private Context context;
+    private final Context context;
     private static List<PhotoItem> photos;
-    private SimpleIdlingResource idlingResource;
+    private final SimpleIdlingResource idlingResource;
 
     public void setDataChanged(List<PhotoItem> newPhotos) {
         photos = newPhotos;
@@ -93,8 +93,8 @@ public final class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoH
 
         PhotoHolder(View itemView) {
             super(itemView);
-            itemImageView = (ImageView) itemView.findViewById(R.id.item_image_view);
-            progressBarItem = (ProgressBar) itemView.findViewById(R.id.progress_bar_item);
+            itemImageView = itemView.findViewById(R.id.item_image_view);
+            progressBarItem = itemView.findViewById(R.id.progress_bar_item);
             itemView.setOnClickListener(this);
         }
 

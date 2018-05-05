@@ -8,12 +8,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -31,9 +32,9 @@ public final class DetailActivity extends AppCompatActivity {
     private final static String KEY_PHOTO = "test.com.flickrgallery.DetailActivity/key photo";
     private final static String KEY_URI = "test.com.flickrgallery.DetailActivity/key url";
     private static final String KEY_TITLE = "test.com.flickrgallery.DetailActivity/key title";
-    public static final String KEY_COLOR_BACKGROUND = "test.com.flickrgallery.DetailActivity/text/key color";
-    public static final String KEY_COLOR_BUTTONS = "test.com.flickrgallery.DetailActivity/text/key color buttons";
-    public static final String TEXT_PLAIN = "test.com.flickrgallery.DetailActivity/text/plain";
+    private static final String KEY_COLOR_BACKGROUND = "test.com.flickrgallery.DetailActivity/text/key color";
+    private static final String KEY_COLOR_BUTTONS = "test.com.flickrgallery.DetailActivity/text/key color buttons";
+    private static final String TEXT_PLAIN = "test.com.flickrgallery.DetailActivity/text/plain";
 
     @BindView(R.id.progress_bar_detail)
     ProgressBar progressBarDetail;
@@ -49,19 +50,22 @@ public final class DetailActivity extends AppCompatActivity {
     CardView cardView;
     @BindView(R.id.layout_background)
     RelativeLayout layoutBackground;
+    @BindView(R.id.title_view)
+    TextView titleView;
 
     // нет кнопки расшарить так как не загрузилась сама картинка
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
         ButterKnife.bind(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        cardView.setVisibility(View.INVISIBLE);
+        cardView.setBackgroundColor(getBackgroundColor());
         layoutBackground.setBackgroundColor(getBackgroundColor());
         imageBack.setColorFilter(getBackButtonsColor());
-        imageShare.setColorFilter(getBackButtonsColor());
-        imageOpenInBrowser.setColorFilter(getBackButtonsColor());
+        imageShare.setColorFilter(getBackgroundColor());
+        imageOpenInBrowser.setColorFilter(getBackgroundColor());
 
         Glide.with(this).load(getPhotoUri()).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.DATA)).listener(new RequestListener<Drawable>() {
             @Override
@@ -72,8 +76,10 @@ public final class DetailActivity extends AppCompatActivity {
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                 progressBarDetail.setVisibility(View.GONE);
-                cardView.setVisibility(View.VISIBLE);
-                Toast.makeText(getApplicationContext(), getPhotoTitle(), Toast.LENGTH_LONG).show();
+                imageShare.setColorFilter(getBackButtonsColor());
+                imageOpenInBrowser.setColorFilter(getBackButtonsColor());
+                titleView.setText(getPhotoTitle());
+                titleView.setTextColor(getBackButtonsColor());
                 return false;
             }
         }).into(detailImage);
@@ -100,7 +106,8 @@ public final class DetailActivity extends AppCompatActivity {
             case R.id.image_share:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType(TEXT_PLAIN);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.look_what_picture_I_found_on_flickr) + getPhotoUri());
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.look_what_picture_I_found_on_flickr));
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getPhotoUri());
                 if (shareIntent.resolveActivity(view.getContext().getPackageManager()) != null) {
                     view.getContext().startActivity(shareIntent);
                 }
@@ -122,7 +129,11 @@ public final class DetailActivity extends AppCompatActivity {
     }
 
     private String getFullUri() {
-        return getIntent().getStringExtra(KEY_URI);
+        String string = getIntent().getStringExtra(KEY_URI);
+        if (TextUtils.isEmpty(string)) {
+            string = getString(R.string.url_flickr);
+        }
+        return string;
     }
 
     private String getPhotoTitle() {

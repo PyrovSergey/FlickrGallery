@@ -2,4 +2,10 @@
     <string name="app_name">Flickr Gallery</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="look_what_picture_I_found_on_flickr">Look what picture I found on Flickr!</string>
+    <string name="url_flickr">www.flickr.com</string>
+    <string name="image">image</string>
+    <string name="detail_image">detail image</string>
+    <string name="share_button">share button</string>
+    <string name="open_in_browser_button">open in browser button</string>
+    <string name="item_image">item image</string>
 </resources>

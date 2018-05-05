@@ -29,11 +29,11 @@ import test.com.flickrgallery.Model.Response;
 
 public final class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    public static final String FLICKR_PHOTOS_SEARCH = "flickr.photos.search";
-    public static final String FLICKR_PHOTOS_GET_RECENT = "flickr.photos.getRecent";
-    public static final String KEY = "b5b12ac4cb833aac7e7e5268027c0ac3";
-    public static final String FORMAT_RESPONSE = "json";
-    public static final String IMAGE_TYPE = "url_s";
+    private static final String FLICKR_PHOTOS_SEARCH = "flickr.photos.search";
+    private static final String FLICKR_PHOTOS_GET_RECENT = "flickr.photos.getRecent";
+    private static final String KEY = "b5b12ac4cb833aac7e7e5268027c0ac3";
+    private static final String FORMAT_RESPONSE = "json";
+    private static final String IMAGE_TYPE = "url_s";
     @Nullable
     private SimpleIdlingResource idlingResource;
 
@@ -93,13 +93,13 @@ public final class MainActivity extends AppCompatActivity implements SwipeRefres
             }
         });
 
-
         getNewPhotos();
     }
 
     @Override
     public void onRefresh() {
         search.setQuery("", false);
+        search.clearFocus();
         getNewPhotos();
     }
 
@@ -155,13 +155,7 @@ public final class MainActivity extends AppCompatActivity implements SwipeRefres
     }
 
     private void showError() {
-//        if (idlingResource != null) {
-//            idlingResource.setIdleState(false);
-//        }
         Toast.makeText(getApplicationContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
-//        if (idlingResource != null) {
-//            idlingResource.setIdleState(true);
-//        }
         swipeRefresh.setRefreshing(false);
     }
 

@@ -36,17 +36,15 @@ public class MainActivityLoadTest {
 
     @Test
     public void idlingResourceTest() {
-        Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.scrollToPosition(49));      //actionOnItemAtPosition(49, ViewActions.click()));
-        //onView(withId(R.id.detail_image)).check(matches(isDisplayed()));
-        //onView(withId(R.id.image_back)).perform(click());
+        Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.scrollToPosition(49));
+        Espresso.onView(ViewMatchers.withId(R.id.photo_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(49, ViewActions.click()));
+        onView(withId(R.id.image_back)).perform(click());
     }
 
-    // Не забудьте отменить регистрацию ресурсов, если это не необходимо, чтобы избежать сбоев.
     @After
     public void unregisterIdlingResource() {
         if (idlingResource != null) {
             Espresso.unregisterIdlingResources(idlingResource);
         }
     }
-
 }
