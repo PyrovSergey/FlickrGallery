@@ -1,6 +1,7 @@
 package test.com.flickrgallery;
 
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
@@ -29,7 +30,7 @@ public class MainActivityChoiseAndBackTest {
     @Before
     public void RegisterIdlingResource() {
         idlingResource = mainActivityActivityTestRule.getActivity().getIdlingResource();
-        Espresso.registerIdlingResources(idlingResource);
+        IdlingRegistry.getInstance().register(idlingResource);
     }
 
     @Test
@@ -139,7 +140,7 @@ public class MainActivityChoiseAndBackTest {
     @After
     public void unregisterIdlingResource() {
         if (idlingResource != null) {
-            Espresso.unregisterIdlingResources(idlingResource);
+            IdlingRegistry.getInstance().unregister(idlingResource);
         }
     }
 }

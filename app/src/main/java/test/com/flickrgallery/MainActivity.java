@@ -123,7 +123,7 @@ public final class MainActivity extends AppCompatActivity implements SwipeRefres
 
                         @Override
                         public void onFailure(Call<Response> call, Throwable t) {
-                            //showError();
+                            showError(t.getMessage());
                         }
                     });
         } else {
@@ -136,22 +136,22 @@ public final class MainActivity extends AppCompatActivity implements SwipeRefres
             idlingResource.setIdleState(false);
         }
         if (isInternetAvailable(this)) {
-        App.getApi()
-                .searchData(FLICKR_PHOTOS_SEARCH,
-                        KEY,
-                        FORMAT_RESPONSE,
-                        1, IMAGE_TYPE, query)
-                .enqueue(new Callback<Response>() {
-                    @Override
-                    public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                        updateData(response);
-                    }
+            App.getApi()
+                    .searchData(FLICKR_PHOTOS_SEARCH,
+                            KEY,
+                            FORMAT_RESPONSE,
+                            1, IMAGE_TYPE, query)
+                    .enqueue(new Callback<Response>() {
+                        @Override
+                        public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                            updateData(response);
+                        }
 
-                    @Override
-                    public void onFailure(Call<Response> call, Throwable t) {
-                        //showError();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<Response> call, Throwable t) {
+                            showError(t.getMessage());
+                        }
+                    });
         } else {
             showNoInternetConnection(this);
         }
@@ -166,6 +166,11 @@ public final class MainActivity extends AppCompatActivity implements SwipeRefres
 
     private void showNoInternetConnection(Context context) {
         Toast.makeText(context, R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+        swipeRefresh.setRefreshing(false);
+    }
+
+    private void showError(String exceptionMessage) {
+        Toast.makeText(getApplicationContext(), exceptionMessage, Toast.LENGTH_LONG).show();
         swipeRefresh.setRefreshing(false);
     }
 
